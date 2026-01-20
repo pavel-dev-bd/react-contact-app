@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from 'react'
-import { Link,useParams } from 'react-router-dom'
+import { Link,useParams,useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { useContext } from 'react';
 import { ContactContext } from '../context/contexProvier.jsx';
 export default function ContactFrom() {
    const {id}=useParams();
+   const navigate=useNavigate();  
    const [contact,setContact]=useState({});
-     const { contacts, deleteContact,updateContact } = useContext(ContactContext);
+     const { updateContact ,fetchContacts} = useContext(ContactContext);
    const [data,setData]=useState({
         firstName:'',
         lastName:'',
@@ -23,7 +24,6 @@ export default function ContactFrom() {
     }
     
     const HandelSubmit=(e)=>{
-      console.log('clicked');
       
         const addcontact=async()=>{
             const res=await axios.post('https://contact-app-cdr6.onrender.com/contacts',data);
@@ -36,20 +36,23 @@ export default function ContactFrom() {
                 phone:'',
                 address:'',
             })
+            navigate("/");
         }
         addcontact();
+        fetchContacts();  
     }
     const singleContact=async ()=>{
     const res = await axios.get(`https://contact-app-cdr6.onrender.com/contacts/${id}`);
-    console.log(res.data);
     setData(res.data);
   }
   useEffect(()=>{
     if(id) singleContact();
   } ,[id]);
-  const updateContactHandeler=()=>{
-    updateContact(id,data);
+      const updateContactHandeler=async()=>{
+        await updateContact(id,data);
+        navigate("/");
   }
+     
 
   return (
       <div className="card-body">
@@ -129,7 +132,8 @@ export default function ContactFrom() {
                       id="address"
                       rows={3}
                       className="form-control"
-                      defaultValue={data?.address}
+                      value={data?.address}
+                      
                     />
                   </div>
                 </div>

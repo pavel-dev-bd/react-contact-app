@@ -5,7 +5,7 @@ const Homepage = () => {
   const [fromcontacts, setFormcontacts] = useState([]);
   const {loading, contacts, deleteContact } = useContext(ContactContext);
   const [searchText, setSearchText] = useState("");
-  const [filterText, setFilterText] = useState("");
+  const [filterText, setFilterText] = useState("oldest_to_first");
 
   const [searchActive, setSearchActive] = useState(false);
 
@@ -61,7 +61,9 @@ const Homepage = () => {
     e.preventDefault();
     setSearchActive(true);
   };
-  
+  useEffect(() => {
+    setFormcontacts(contacts);
+  }, [contacts]);
   return (
     <main className="py-5">
     <div className="container">
