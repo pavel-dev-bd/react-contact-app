@@ -26,6 +26,10 @@ export default function ContactFrom() {
     const HandelSubmit=(e)=>{
       
         const addcontact=async()=>{
+            if(!data.firstName || !data.lastName || !data.email || !data.phone || !data.address){
+                alert("All field are required");
+                return;
+            }
             const res=await axios.post('https://contact-app-cdr6.onrender.com/contacts',data);
             const rendomId=Math.floor(Math.random()*10000)+1;
             res.data.id=rendomId;
@@ -49,6 +53,10 @@ export default function ContactFrom() {
     if(id) singleContact();
   } ,[id]);
       const updateContactHandeler=async()=>{
+        if(!data.firstName || !data.lastName || !data.email || !data.phone || !data.address){
+                alert("All field are required");
+                return;
+        }
         await updateContact(id,data);
         navigate("/");
   }
