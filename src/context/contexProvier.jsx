@@ -21,9 +21,15 @@ export const ContactProvider = ({ children }) => {
   // detete contact
   const deleteContact = async (id) => {
     if (window.confirm("Are you sure you want to delete this contact?")) {
-      await axios.delete(`https://contact-app-cdr6.onrender.com/contacts/${id}`);
-      fetchContacts();
+      try {
+        await axios.delete(`https://contact-app-cdr6.onrender.com/contacts/${id}`);
+        fetchContacts();
+        return true;
+      } catch (error) {
+        return false;
+      }
     }
+    return false;
   };
   // upadate contact
   const updateContact = async (id, updatedData) => {
@@ -32,7 +38,7 @@ export const ContactProvider = ({ children }) => {
   }
 
   return (
-    <ContactContext.Provider value={{ contacts, fetchContacts, deleteContact, updateContact, loading }}>
+    <ContactContext.Provider value={{ loading,contacts, fetchContacts, deleteContact, updateContact }}>
       {children}
     </ContactContext.Provider>
   );

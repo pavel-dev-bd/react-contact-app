@@ -1,21 +1,28 @@
 
 import axios from 'axios';
-import React, { useState,useEffect } from 'react';
-import {useParams ,Link} from 'react-router-dom';
-
-
-const Singlepage = () => {
+import React, { useState,useEffect,useContext } from 'react';
+import {useParams ,Link,useNavigate} from 'react-router-dom';
+import {ContactContext} from '../context/contexProvier.jsx';
+const Singlepage = () => {  
+  const navigation=useNavigate();
+  const { deleteContact } = useContext(ContactContext);
   const {id}=useParams();
   
   const [contact,setContact]=useState({});
   const singleContact=async ()=>{
     const res = await axios.get(`https://contact-app-cdr6.onrender.com/contacts/${id}`);
-    console.log(res.data);
     setContact(res.data);
   }
   useEffect(()=>{
     singleContact();
   } ,[id]);
+  const deleteHandeler = async () => {
+    const isDeleted = await deleteContact(id);
+    if (isDeleted) {
+      navigation('/');
+    }
+  }
+
   return (
 <main className="py-5">
     <div className="container">
@@ -92,9 +99,9 @@ const Singlepage = () => {
                       <Link to={`/edit/${id}`} className="btn btn-info">
                         Edit
                       </Link>
-                      <Link to={`/delete/${id}`} className="btn  mx-1 btn-outline-danger">
+                      <button onClick={deleteHandeler} className="btn  mx-1 btn-outline-danger">
                         Delete
-                      </Link>
+                      </button>
                       <Link
                         to="/"
                         className="btn btn-outline-secondary"

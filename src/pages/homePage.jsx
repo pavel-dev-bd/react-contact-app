@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ContactContext } from "../context/contexProvier.jsx";
 const Homepage = () => {
   const [fromcontacts, setFormcontacts] = useState([]);
-  const { contacts, deleteContact } = useContext(ContactContext);
+  const {loading, contacts, deleteContact } = useContext(ContactContext);
   const [searchText, setSearchText] = useState("");
   const [filterText, setFilterText] = useState("");
 
@@ -127,10 +127,15 @@ const Homepage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                {fromcontacts.length === 0 ? (
+                  {loading ? (
                   <tr>
-                    <td colSpan="6" className="text-center text-danger">No Contact Information</td>
+                    <td colSpan="6" className="text-center">Loading...</td>
                   </tr>
+                ) : (
+                  fromcontacts.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="text-center text-danger">No Contact Information</td>
+                    </tr>
                 ) : (
                   fromcontacts.map((contact, index) => (
                     <tr key={contact.id || index}>
@@ -156,7 +161,7 @@ const Homepage = () => {
                       </td>
                     </tr>
                   ))
-                )}
+                ))}
                 </tbody>
               </table>
             </div>
